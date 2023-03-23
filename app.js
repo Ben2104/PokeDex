@@ -1,5 +1,5 @@
 const pokedex = document.getElementById("pokedex");
-const pokeCache ={};
+const pokeCache = {};
 const fetchPokemon = async () => {
     const url = `https://pokeapi.co/api/v2/pokemon/?limit=150`;
     const res = await fetch(url);
@@ -13,8 +13,9 @@ const fetchPokemon = async () => {
 
 };
 const displayPokemon = (pokemon) => {
+
     const pokemonHTMLString = pokemon.map(pokeman => `
-    <li class = "card" onclick = "selectPokemon(${pokeman.id})">
+    <li class = "card" id = "click" onclick = "selectPokemon(${pokeman.id})">
         <img class = "card-image" src = "${pokeman.image}"/>
         <h2 class = "card-title"> ${pokeman.id}. ${pokeman.name} </h2>
     </li>`
@@ -23,18 +24,19 @@ const displayPokemon = (pokemon) => {
 
 };
 const selectPokemon = async (id) => {
-    if(!pokeCache[id]){
-        const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-        const res = await fetch(url)
-        const pokeman = await res.json();
-        pokeCache[id] = pokeman;
-        displayPopup(pokeman)
-    }
-    displayPopup(pokeCache[id]);
+    var element = document.getElementById("click");
+    element.removeEventListener("click",selectPokemon);
+    const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+    const res = await fetch(url)
+    const pokeman = await res.json();
+    pokeCache[id] = pokeman;
+    displayPopup(pokeman)
+
+
 };
 fetchPokemon();
 
-const displayPopup  = (pokeman) => {
+const displayPopup = (pokeman) => {
     console.log(pokeman);
     const type = pokeman.types.map((type) => type.type.name).join(', ');
     const image = pokeman.sprites['front_default'];
@@ -42,7 +44,7 @@ const displayPopup  = (pokeman) => {
         `<div class = "popup">
             <button id = "closeBtn" onclick = "closePopup()">Close
             </button>
-            <div class = "card" onclick = "selectPokemon(${pokeman.id})">
+            <div class = "card">
                 <img class = "card-image" src = "${image}"/>
                 <h2 class = "card-title"> ${pokeman.id}. ${pokeman.name} </h2>
                 <p> <small>Height: </small>${pokeman.height}
