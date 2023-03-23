@@ -24,12 +24,9 @@ const displayPokemon = (pokemon) => {
 
 };
 const selectPokemon = async (id) => {
-    var element = document.getElementById("click");
-    element.removeEventListener("click",selectPokemon);
     const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
     const res = await fetch(url)
     const pokeman = await res.json();
-    pokeCache[id] = pokeman;
     displayPopup(pokeman)
 
 
